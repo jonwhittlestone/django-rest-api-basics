@@ -2,6 +2,7 @@ from rest_framework import generics, mixins
 from postings.models import BlogPost
 from .serializers import BlogPostSerializer
 from django.db.models import Q
+from .permissions import IsOwnerOrReadOnly
 
 class BlogPostAPIView(mixins.CreateModelMixin, generics.ListAPIView):
     lookup_field = 'pk'     # (?P<pk>\d+)
@@ -31,6 +32,7 @@ class BlogPostRudView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'pk'     # (?P<pk>\d+)
     queryset = BlogPost.objects.all()
     serializer_class = BlogPostSerializer
+    permission_classes = [IsOwnerOrReadOnly]
 
     def get_queryset(self):
         """Could override"""
