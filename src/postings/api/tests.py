@@ -69,3 +69,10 @@ class BlogPostAPITestCase(APITestCase):
         # test that we cannot make a PUT if we haven't logged in
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_user_login(self):
+        data = {'username':'testcfeuser','password':'somerandopassword'}
+        url = api_reverse('api-login')
+        rsp = self.client.post(url, data)
+        print(rsp.data)
+        self.assertEqual(rsp.status_code, status.HTTP_200_OK)
