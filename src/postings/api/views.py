@@ -8,6 +8,9 @@ class BlogPostAPIView(mixins.CreateModelMixin, generics.ListAPIView):
     lookup_field = 'pk'     # (?P<pk>\d+)
     serializer_class = BlogPostSerializer
 
+    def get_serializer_context(self, *args, **kwargs):
+        return {"request": self.request}
+
     def get_queryset(self):
         """Could override"""
         qs = BlogPost.objects.all()
@@ -33,6 +36,10 @@ class BlogPostRudView(generics.RetrieveUpdateDestroyAPIView):
     queryset = BlogPost.objects.all()
     serializer_class = BlogPostSerializer
     permission_classes = [IsOwnerOrReadOnly]
+
+
+    def get_serializer_context(self, *args, **kwargs):
+        return {"request": self.request}
 
     def get_queryset(self):
         """Could override"""
