@@ -36,3 +36,17 @@ class BlogPostAPITestCase(APITestCase):
         response = self.client.post(url, data, format='json')
         # should be 401 because unauthourized users cannot post blog
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_update_item(self):
+        "Tests that HTTP method is disallowed if we try to POST to an existing blog_post"
+
+        blog_post = BlogPost.objects.first()
+        url = blog_post.get_api_url()
+        data = {'title': 'some rando title', 'content': 'some more content'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+        # test that we cannot make a PUT if we haven't logged in
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
