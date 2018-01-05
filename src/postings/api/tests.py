@@ -28,3 +28,11 @@ class BlogPostAPITestCase(APITestCase):
         url = api_reverse('api-postings:post-listcreate') 
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # print(response.data)
+
+    def test_post_item(self):
+        data = {'title': 'some rando title', 'content': 'some more content'}
+        url = api_reverse('api-postings:post-listcreate') 
+        response = self.client.post(url, data, format='json')
+        # should be 401 because unauthourized users cannot post blog
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
